@@ -65,6 +65,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{ matrix.build_type }} --output-junit ${{github.workspace}}/build/test-report.xml
 
+    - if: ${{ matrix.build_type == 'Release'}}
     - name: "Archive Install ${{ matrix.platform }}-${{ matrix.build_type }}"
       uses: actions/upload-artifact@v2
       with:
