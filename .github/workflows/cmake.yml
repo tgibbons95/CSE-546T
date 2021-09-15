@@ -59,14 +59,14 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{ matrix.build_type }} --output-junit ${{github.workspace}}/build/test.json
 
-    - if: ${{ matrix.platform == 'ubuntu' }} && ${{ matrix.build_type == 'Release' }}
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
       name: Archive test results
       uses: actions/upload-artifact@v2
       with:
         name: test-report
         path: ${{github.workspace}}/build/test-report.xml
 
-    - if: ${{ matrix.platform == 'ubuntu' }} && ${{ matrix.build_type == 'Release' }}
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
       name: Code Coverage
       working-directory: ${{github.workspace}}/build
       shell: bash
@@ -76,7 +76,7 @@ jobs:
         cd code-coverage
         genhtml main_coverage.info -o coverage --function-coverage
 
-    - if: ${{ matrix.platform == 'ubuntu' }} && ${{ matrix.build_type == 'Release' }}
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
       name: Archive code coverage results
       uses: actions/upload-artifact@v2
       with:
