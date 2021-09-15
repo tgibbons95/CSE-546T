@@ -71,10 +71,10 @@ jobs:
       working-directory: ${{github.workspace}}/build
       shell: bash
       run: |
-        mkdir code-coverage
-        lcov --capture --directory . -o code-coverage/main_converage.info
+        mkdir ${{github.workspace}}/build/code-coverage
+        lcov --capture --directory . -o ${{github.workspace}}/build/code-coverage/main_coverage.info
         cd code-coverage
-        genhtml code-coverage/main_coverage.info -o code-coverage/coverage --function-coverage
+        genhtml ${{github.workspace}}/build/code-coverage/main_coverage.info -o ${{github.workspace}}/build/code-coverage/coverage --function-coverage
 
     - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
       name: Archive code coverage results
