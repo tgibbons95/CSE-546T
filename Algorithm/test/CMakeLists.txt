@@ -10,8 +10,7 @@ file(GLOB_RECURSE SOURCES "*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Add Options
-target_compile_options(${PROJECT_NAME} PUBLIC -fprofile-arcs -ftest-coverage)
-target_link_options(${PROJECT_NAME} PUBLIC -lgcov --coverage)
+enable_code_coverage(${PROJECT_NAME})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} BuildingBlocksLib)

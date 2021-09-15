@@ -10,8 +10,7 @@ file(GLOB_RECURSE SOURCES "*.cpp" "*h")
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
 # Add Options
-target_compile_options(${PROJECT_NAME} PUBLIC -fprofile-arcs -ftest-coverage)
-target_link_options(${PROJECT_NAME} PUBLIC -lgcov --coverage)
+enable_code_coverage(${PROJECT_NAME})
 
 # Include header files
 target_include_directories(${PROJECT_NAME} PUBLIC "${Algorithm_SOURCE_DIR}/include")

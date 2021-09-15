@@ -4,10 +4,7 @@ project(CSE-546T)
 
 enable_testing()
 
-# Include diretories
-include_directories(/usr/include)
-link_directories(/usr/lib)
-
+add_subdirectory(CMake)
 add_subdirectory(ExternalSource)
 
 add_subdirectory(BuildingBlocks)
