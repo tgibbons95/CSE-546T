@@ -18,13 +18,15 @@ jobs:
     runs-on: "${{ matrix.platform }}-latest"
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
     - if: ${{ matrix.platform == 'ubuntu' }}
       name: Install Linux Dependencies
       run: |
           sudo apt-get update
           sudo apt install xorg-dev libglu1-mesa-dev
+          sudo apt install lcov
 
     - name: Checkout Submodule
       run: git submodule update --init --recursive
@@ -47,12 +49,46 @@ jobs:
     - name: "Build ${{ matrix.platform }} in ${{ matrix.build_type }}"
       working-directory: ${{github.workspace}}/build
       shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config ${{ matrix.build_type }}
+
+    - name: "Install ${{ matrix.platform }} in ${{ matrix.build_type }}"
+      working-directory: ${{github.workspace}}/build
+      run: cmake --install . --prefix ${{github.workspace}}/build/install --config ${{ matrix.build_type }}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
       shell: bash
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{ matrix.build_type }}
+      run: ctest -C ${{ matrix.build_type }} --output-junit ${{github.workspace}}/build/test-report.xml
+
+    - if: ${{ matrix.build_type == 'Release'}}
+      name: "Archive Install ${{ matrix.platform }}-${{ matrix.build_type }}"
+      uses: actions/upload-artifact@v2
+      with:
+        name: "${{ matrix.platform }}-${{ matrix.build_type }}"
+        path: ${{github.workspace}}/build/install
+        
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
+      name: Archive test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-report
+        path: ${{github.workspace}}/build/test-report.xml
+
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Debug'}}
+      name: Code Coverage
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: |
+        mkdir ${{github.workspace}}/build/code-coverage
+        lcov --capture --directory . -o tmp_coverage.info 
+        lcov --remove tmp_coverage.info -o ${{github.workspace}}/build/code-coverage/main_coverage.info '/usr/lib/*' '/usr/include/*' '*ExternalSource/*'
+        genhtml ${{github.workspace}}/build/code-coverage/main_coverage.info -o ${{github.workspace}}/build/code-coverage/coverage --function-coverage --demangle-cpp --no-sort --title "CSE 546T Computational Geometry Test Results"
+
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Debug'}}
+      name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: ${{github.workspace}}/build/code-coverage
