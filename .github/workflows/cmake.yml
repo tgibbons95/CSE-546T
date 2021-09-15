@@ -18,14 +18,15 @@ jobs:
     runs-on: "${{ matrix.platform }}-latest"
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
     - if: ${{ matrix.platform == 'ubuntu' }}
       name: Install Linux Dependencies
       run: |
           sudo apt-get update
           sudo apt install xorg-dev libglu1-mesa-dev
-          sudo apt install gcov
+          sudo apt install gcovr
           sudo apt install lcov
           sudo apt install genhtml
 
