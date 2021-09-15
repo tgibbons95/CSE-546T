@@ -72,8 +72,8 @@ jobs:
       shell: bash
       run: |
         mkdir ${{github.workspace}}/build/code-coverage
-        lcov --capture --directory . --remove tmp_coverage.info -o ${{github.workspace}}/build/code-coverage/main_coverage.info '/usr/lib/*' '/usr/include/*'
-        cd code-coverage
+        lcov --capture --directory . -o tmp_coverage.info
+        lcov --remove tmp_coverage.info -o ${{github.workspace}}/build/code-coverage/main_coverage.info '/usr/lib/*' '/usr/include/*' 'ExternalSource/*'
         genhtml ${{github.workspace}}/build/code-coverage/main_coverage.info -o ${{github.workspace}}/build/code-coverage/coverage --function-coverage
 
     - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
