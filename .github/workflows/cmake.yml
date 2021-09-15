@@ -79,7 +79,7 @@ jobs:
         name: test-report
         path: ${{github.workspace}}/build/test-report.xml
 
-    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Debug'}}
       name: Code Coverage
       working-directory: ${{github.workspace}}/build
       shell: bash
@@ -89,7 +89,7 @@ jobs:
         lcov --remove tmp_coverage.info -o ${{github.workspace}}/build/code-coverage/main_coverage.info '/usr/lib/*' '/usr/include/*' '${{github.workspace}}/build/ExternalSource/*'
         genhtml ${{github.workspace}}/build/code-coverage/main_coverage.info -o ${{github.workspace}}/build/code-coverage/coverage --function-coverage --demangle-cpp --no-sort --title "CSE 546T Computational Geometry Test Results"
 
-    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
+    - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Debug'}}
       name: Archive code coverage results
       uses: actions/upload-artifact@v2
       with:
