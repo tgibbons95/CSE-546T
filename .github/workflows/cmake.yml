@@ -74,7 +74,7 @@ jobs:
         mkdir code-coverage
         lcov --capture --directory . -o code-coverage/main_converage.info
         cd code-coverage
-        genhtml main_coverage.info -o coverage --function-coverage
+        genhtml code-coverage/main_coverage.info -o code-coverage/coverage --function-coverage
 
     - if: ${{ matrix.platform == 'ubuntu' && matrix.build_type == 'Release'}}
       name: Archive code coverage results
