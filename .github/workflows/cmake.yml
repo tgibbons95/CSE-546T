@@ -25,6 +25,9 @@ jobs:
       run: |
           sudo apt-get update
           sudo apt install xorg-dev libglu1-mesa-dev
+          sudo apt install gcov
+          sudo apt install lcov
+          sudo apt install genhtml
 
     - name: Checkout Submodule
       run: git submodule update --init --recursive
