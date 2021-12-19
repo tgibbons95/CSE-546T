@@ -18,3 +18,4 @@ Output (On every push)
   -Debug configurations are linked with extra instrumentation that is not in the release installation.
   -lcov and genhtml is used to generate the code coverage
   -I have no plans to do code coverage for other OS's and compilers as this project does not have any lines of code that are OS or compiler dependent. 
+
